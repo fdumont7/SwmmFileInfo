@@ -41,8 +41,9 @@ for x in inputList:
     fi = fileInfo(x, temp)
     myList.append([fi.name,fi.subcatchments,fi.subAreas,fi.infiltration,fi.evaporation,fi.junctions,fi.outfalls,fi.storage,fi.conduits,fi.orifices,fi.xsections,fi.controls,fi.inflows,fi.timeseries])
 
+print(folder.split('\\')[-1])
 print("Number of files: ", len(myList))    
-csvFileName = "results.csv"
+csvFileName = folder.split('\\')[-1]
 
 with open(csvFileName, 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
