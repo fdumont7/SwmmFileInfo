@@ -31,15 +31,20 @@ def isInString(string, substring):
         
 
 folder = input("Enter folder location of input files: ")
-inputList = os.listdir(folder)
+inputList = []
+for root, dirs, files in os.walk(folder):
+    for file in files:
+        inputList.append(os.path.join(root,file))
+#inputList = os.listdir(folder)
 
 fields = ['Name', 'Subcatchments', 'SubAreas', 'Infiltration', 'Evaporation', 'Junctions', 'Outfalls', 'Storage', 'Conduits', 'Orifices', 'XSections', 'Controls', 'Inflows', 'Timeseries']
 
 myList = []
+
 for f in inputList:
     if f.split('.')[-1].lower() == 'inp' : 
-        fullFile = folder + "\\" + f
-        fi = fileInfo(f, fullFile)
+        #fullFile = folder + "\\" + f
+        fi = fileInfo(f.split('\\')[-1], f)
         myList.append([fi.name,fi.subcatchments,fi.subAreas,fi.infiltration,fi.evaporation,fi.junctions,fi.outfalls,fi.storage,fi.conduits,fi.orifices,fi.xsections,fi.controls,fi.inflows,fi.timeseries])
 
 print(folder.split('\\')[-1])
