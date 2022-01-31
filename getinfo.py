@@ -5,7 +5,7 @@ import csv
 class fileInfo:
     def __init__(self, fileName, fullFile):
         self.name = fileName
-        file = open(fullFile)
+        file = open(fullFile, encoding = "mbcs")
         info = file.read()
         file.close()
         self.subcatchments = isInString(info, "[SUBCATCHMENTS]")
@@ -36,14 +36,16 @@ inputList = os.listdir(folder)
 fields = ['Name', 'Subcatchments', 'SubAreas', 'Infiltration', 'Evaporation', 'Junctions', 'Outfalls', 'Storage', 'Conduits', 'Orifices', 'XSections', 'Controls', 'Inflows', 'Timeseries']
 
 myList = []
-for x in inputList:
-    temp = folder + "\\" + x
-    fi = fileInfo(x, temp)
-    myList.append([fi.name,fi.subcatchments,fi.subAreas,fi.infiltration,fi.evaporation,fi.junctions,fi.outfalls,fi.storage,fi.conduits,fi.orifices,fi.xsections,fi.controls,fi.inflows,fi.timeseries])
+for f in inputList:
+    if f.split('.')[-1].lower() == 'inp' : 
+        fullFile = folder + "\\" + f
+        fi = fileInfo(f, fullFile)
+        myList.append([fi.name,fi.subcatchments,fi.subAreas,fi.infiltration,fi.evaporation,fi.junctions,fi.outfalls,fi.storage,fi.conduits,fi.orifices,fi.xsections,fi.controls,fi.inflows,fi.timeseries])
 
 print(folder.split('\\')[-1])
 print("Number of files: ", len(myList))    
-csvFileName = folder.split('\\')[-1]
+csvFileName = folder.split('\\')[-1] + ".csv"
+
 
 with open(csvFileName, 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
