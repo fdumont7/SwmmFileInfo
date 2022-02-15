@@ -1,3 +1,11 @@
+#getinfo.py
+#Author: Faryn Dumont
+#Date: 2/15/2022
+
+#Description:
+#returns a csv file with information that shows if a SWMM input file has certain parameters.
+#run 'py getinfo.py' in cmd to run and then input the folder of swmm input files you would like information from.
+
 import os
 import re
 import csv
@@ -69,7 +77,6 @@ inputList = []
 for root, dirs, files in os.walk(folder):
     for file in files:
         inputList.append(os.path.join(root,file))
-#inputList = os.listdir(folder)
 fields = ['Name', 'Title', 'Options', 'Report', \
           'Files', 'Rain gages', 'Evaporation', \
           'Temperature', 'Adjustments', 'Subcatchments', \
@@ -88,7 +95,6 @@ myList = []
 
 for f in inputList:
     if f.split('.')[-1].lower() == 'inp' : 
-        #fullFile = folder + "\\" + f
         fi = fileInfo(f.split('\\')[-1], f)
         myList.append([fi.name, fi.title, fi.options, fi.report, \
                        fi.files, fi.raingages, fi.evaporation, \
@@ -103,14 +109,25 @@ for f in inputList:
                        fi.coverages, fi.loadings, fi.buildup, fi.washoff, \
                        fi.treatment, fi.inflows, fi.dwf, fi.rdii, \
                        fi.hydrographs, fi.curves, fi.timeseries, fi.patterns])
-        #myList.append([fi.name,fi.subcatchments,fi.subAreas,fi.infiltration,fi.evaporation,fi.junctions,fi.outfalls,fi.storage,fi.conduits,fi.orifices,fi.xsections,fi.controls,fi.inflows,fi.timeseries])
-
+        
 print(folder.split('\\')[-1])
-print("Number of files: ", len(myList))    
+print("Number of files: ", len(myList))  
+  
 csvFileName = folder.split('\\')[-1] + ".csv"
+
+parameterSum = myList[0].copy()
+parameterSum[0] = "Sum"
+for i in myList:
+    for p, item in enumerate(i[1:-1], start = 1):
+        parameterSum[p] = parameterSum[p] + i[p]
+        
+
+    
 
 
 with open(csvFileName, 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(fields)
     csvwriter.writerows(myList)
+    csvwriter.writerow('')
+    csvwriter.writerow(parameterSum)
